@@ -18,9 +18,10 @@ Simple service to perform polygon-geometry operations: intersection of 2 polygon
  $ pip install -r requirements.txt
 ```
 
-## Testing (from pGaas dir, will run tests/test_polygon_geometry.py)
+### Testing all test file in tests/ dir
 ```
+## from pGaas dir
 (venv) $ python -m pytest -v
 ```
 
-## Run Flask dev server
+### Run Flask dev server
