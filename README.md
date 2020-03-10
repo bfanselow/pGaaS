@@ -11,7 +11,7 @@ Simple service to perform polygon-geometry operations: intersection of 2 polygon
  * Flask==1.1.1 (auto-installs lots of other pkgs)
 
 ## Notes:
-* Engine for all GeoJSON work is *app/polygon_geometry.py* 
+* Engine for all GeoJSON work is **app/polygon_geometry.py** 
 * Shapley appears to not enforce the August 2016 (GeoJSON) IETF specification - validating objects from the old informal 2008 spec.  Some of the GeoJSON objects used in testing will pass validation but should techncially fail the "right-hand rule". 
 * GeoJSON files for states (colorado, wyoming, montana) from https://eric.clst.org/tech/usgeojson/
 

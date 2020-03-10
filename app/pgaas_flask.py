@@ -53,8 +53,7 @@ def error_response(e):
 ## NOT USED
 @app.before_request  
 def request_init():
-  ###print(">>BEFORE-REQUEST (%s)" % (request.path))
-  pass
+  print(">>REQUEST (%s)" % (request.path))
 
 ##---------------------------------------------------------------------------------------
 ##
@@ -117,8 +116,9 @@ def favicon():
 ##############################################################################
 if __name__ == '__main__':
   print("Testing Flask app from CLI...")
-  #print("PYTHON-PATH=%s" % (sys.path))
+  print("PYTHON-PATH=%s" % (sys.path))
 
   #app.run(host="10.40.161.251", port=8080)
-  app.run(port=8080)
+  #app.run(port=8080)
+  app.run(port=80)
   print("\nExiting. See you next time!\n")
