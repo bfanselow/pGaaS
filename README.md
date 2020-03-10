@@ -51,7 +51,7 @@ python app/pgass_flask.py
 ### Run with WSGI in Apache 
 See pgass_flask.wsgi 
 
-## Example REQRESTS/RESPONSES (failures and successes):
+## Example REQUESTS/RESPONSES (failures and successes):
 **GET (Empty payload)** 
 ```
 $ curl http://127.0.0.1:8080/api/polygon_union
