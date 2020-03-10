@@ -9,7 +9,7 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
 {"intersection":1}
 ```
   
- 2) **Union** of 2+ polygons: returns {"union":0} if no union, or {"union":{ <GeoJSON-Polygon> }} if union
+ 2) **Union** of 2+ polygons: returns {"union":0} if no union, or {"union":{ __GeoJSON-PolygonObj__ }} if union
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]]] } ]}' http://127.0.0.1:8080/api/polygon_union
 {"union":0}
