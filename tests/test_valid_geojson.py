@@ -4,7 +4,7 @@
  Description: pytest tests for both methods using VALID geojson objects
  
 """
-
+import json
 import pytest
 from app.polygon_geometry import check_polygon_intersection, get_polygon_union
 
@@ -26,3 +26,32 @@ def test_polygon_NON_intersection():
     assert result == False 
 
 ##------------------------------------------------------------------------
+def test_colorado_wyoming_union():
+    ## Test get_polygon_union() with two adjecent state polygon objects 
+
+    with open('./tests/colorado.json', 'r') as f_colorado:
+      d_colorado = json.load(f_colorado)
+      json_colorado = json.dumps(d_colorado)
+ 
+      with open('./tests/wyoming.json', 'r') as f_wyoming:
+        d_wyoming = json.load(f_wyoming)
+        json_wyoming = json.dumps(d_wyoming)
+
+      result = check_polygon_intersection(json_colorado, json_wyoming) 
+      assert result == True
+##------------------------------------------------------------------------
+def test_colorado_montana_union():
+    ## Test get_polygon_union() with two non-adjecent state polygon objects 
+
+    with open('./tests/colorado.json', 'r') as f_colorado:
+      d_colorado = json.load(f_colorado)
+      json_colorado = json.dumps(d_colorado)
+ 
+      with open('./tests/montana.json', 'r') as f_montana:
+        d_montana = json.load(f_montana)
+        json_montana = json.dumps(d_montana)
+
+      result = check_polygon_intersection(json_colorado, json_montana) 
+      assert result == False 
+
+

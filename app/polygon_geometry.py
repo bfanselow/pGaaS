@@ -3,7 +3,9 @@
 
   File; polygon_geometry.py 
   Description: Simple polygon geometry methods using GeoJSON inputs
-  Requires: pip install shapely
+  Requires: 
+    pip install shapely
+    pip install geojson 
   Author: William Fanselow 2020-03-09 
   
   See tests/test_polygon_geometry.py for testing BAD json/geojson
