@@ -28,6 +28,8 @@ def polygon_intersection():
   tag = "%s.polygon_intersection()" % blueprint_id
   d_request_data = request.get_json(force=True)
   
+  #print("%s: Getting intersection of polygons: %s" % (tag, str(d_request_data)))
+  
   l_polygons = d_request_data['polygons'] ## already validated existence
   poly_1 = l_polygons[0]
   poly_2 = l_polygons[1]
@@ -54,7 +56,7 @@ def polygon_union():
   tag = "%s.polygon_union()" % blueprint_id
   d_request_data = request.get_json(force=True)
 
-  print("%s: Getting union of polygons: %s" % (tag, str(d_request_data)))
+  #print("%s: Getting union of polygons: %s" % (tag, str(d_request_data)))
 
   l_polygons = d_request_data['polygons'] ## already validated existence
 
