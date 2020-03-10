@@ -2,7 +2,21 @@
 
 ## Polygon-Geometry-as-a-Service
 
-Simple service to perform polygon-geometry operations: intersection of 2 polygons, union of 2+ polygons
+Simple service to perform polygon-geometry operations
+ 1) **intersection** of 2 polygons (in GeoJSON format): returns {"intersection":(0|1)}
+```
+$ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[1199915, 633079], [1199915, 614453], [1219317, 614453], [1219317, 633079], [1199915, 633079]]] } ]}' http://127.0.0.1:8080/api/polygon_intersection
+{"intersection":1}
+```
+  
+ 2) **Union** of 2+ polygons: returns {"union":0} if no union, or {"union":{ <GeoJSON-Polygon> }} if union
+```
+$ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]]] } ]}' http://127.0.0.1:8080/api/polygon_union
+{"union":0}
+
+$ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[1199915, 633079], [1199915, 614453], [1219317, 614453], [1219317, 633079], [1199915, 633079]]] } ]}' http://127.0.0.1:8080/api/polygon_union
+{"union":{"coordinates":[[[1219317.0,624154.0],[1231345.0,624154.0],[1231345.0,601260.0],[1208064.0,601260.0],[1208064.0,614453.0],[1199915.0,614453.0],[1199915.0,633079.0],[1219317.0,633079.0],[1219317.0,624154.0]]],"type":"Polygon"}}
+```
 
 ## Requirements:
  * geojson==2.5.0
