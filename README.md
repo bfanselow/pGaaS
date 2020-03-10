@@ -94,8 +94,8 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
 {"union":{"coordinates":[[[1219317.0,624154.0],[1231345.0,624154.0],[1231345.0,601260.0],[1208064.0,601260.0],[1208064.0,614453.0],[1199915.0,614453.0],[1199915.0,633079.0],[1219317.0,633079.0],[1219317.0,624154.0]]],"type":"Polygon"}}
 ```
 
-```
 **POST (successful identification of NON-intersection)** 
+```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]]] } ]}' http://127.0.0.1:8080/api/polygon_intersection
 {"intersection":0}
 ```
