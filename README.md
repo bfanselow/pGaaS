@@ -9,9 +9,10 @@ Simple service to perform polygon-geometry operations: intersection of 2 polygon
  * geojson==2.5.0
  * Shapely==1.7.0
  * pytest==5.3.5
+ * Flask==1.1.1 (auto-installs lots of other pkgs)
 
 ## Notes:
-* Shapley appears to not enforce the August 2016 (GeoJSON) IETF specification - validating objects from the old informal 2008 spec.  Some of the geoJSON objects used in testing will pass but should techncially fail the "right-hand rule" 
+* Shapley appears to not enforce the August 2016 (GeoJSON) IETF specification - validating objects from the old informal 2008 spec.  Some of the GeoJSON objects used in testing will pass validation but should techncially fail the "right-hand rule". 
 * GeoJSON files for states (colorado, wyoming, montana) from https://eric.clst.org/tech/usgeojson/
 
 ## Setup
@@ -22,10 +23,15 @@ Simple service to perform polygon-geometry operations: intersection of 2 polygon
  $ pip install -r requirements.txt
 ```
 
-### Testing all test file in tests/ dir
+### Testing all test-files in tests/ dir
 ```
 ## from pGaas dir
 (venv) $ python -m pytest -v
 ```
+### Run the Flask DEV server (NOT for production!!)
+```
+python app/pgass_flask.py
+```
 
-### Run Flask dev server
+### Run with WSGI in Apache 
+See pgass_flask.wsgi 
