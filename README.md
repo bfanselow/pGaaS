@@ -76,7 +76,7 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
 {"error":{"exception":"ApiDataError","message":"Request payload must contain a list of 2 or more polygons","timestamp":"2020-03-10 20:28:31"}}
 ```
 
-**POST (Invalid "polygons". See tests/dir for more GeoJson validation tests)** 
+**POST (Invalid "polygons". See tests/ dir for more GeoJson validation tests)** 
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": ["foo", "bar"]}' http://127.0.0.1:8080/api/polygon_union
 {"error":{"exception":"InvalidGeoJson","message":"Invalid GeoJSON format: Expecting value: line 1 column 1 (char 0)","timestamp":"2020-03-10 20:39:28"}}
