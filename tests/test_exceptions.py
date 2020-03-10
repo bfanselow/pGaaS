@@ -16,9 +16,6 @@ QUOTES = ""     # valid json, but invalid geojson
 EMPTYLIST = []  # valid json, but invalid geojson 
 EMPTYDICT = {}  # valid json, but invalid geojson 
 
-## invalid geojson (dict - this is NOT a json string)
-POLY_DICT = { "type": "Polygon", "coordinates": [ [ [ 100.0, 0.0 ], [ 101.0, 0.0 ], [ 101.0, 1.0 ], [ 100.0, 1.0 ], [ 100.0, 0.0 ] ] ] }
-
 ## invalid geojson ("coord" instead of "coordinate" key)
 ## Surprisingly, this NOT handled by obj.is_valid as geojson.Polgon automatically converts any 
 ## object missing the "coordinates" key to:  {"coordinates": [], "type": "Polygon"})
@@ -56,7 +53,7 @@ def test_exception_on_invalid_input():
 def test_exception_on_invalid_geojson():
     ## Test check_polygon_intersection() for raise(InvalidGeoJson) on invalid GeoJSON format
     with pytest.raises(InvalidGeoJson):
-        result = check_polygon_intersection(POLY_DICT, POLY_GOOD) 
+        result = check_polygon_intersection(NON_POLY, POLY_GOOD) 
 
 ##------------------------------------------------------------------------
 ## Test get_polygon_union() with multiple sets of inputs with BAD json or BAD geojson
@@ -68,7 +65,6 @@ def test_exception_on_invalid_geojson():
    (POLY_GOOD, "bogus-str"),
    (POLY_GOOD, EMPTYLIST),
    (POLY_GOOD, EMPTYDICT),
-   (POLY_GOOD, POLY_DICT),
    (POLY_GOOD, BAD_COORDINATES),
    (POLY_GOOD, BAD_TYPE),
    (POLY_GOOD, BAD_COORD_LIST),

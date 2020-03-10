@@ -37,8 +37,8 @@ def dprint(level, msg):
 ##----------------------------------------------------------------------------------------------
 def validate_geojson(obj):
   """
-  Validate that input object has valid GeoJSON format for polygon
-  Required Arg (json): polygon object in GeoJSON format
+  Validate that input object is a valid json and has valid GeoJSON format for a Polygon.
+  Required Arg (json|dict): polygon object in GeoJSON format (we can handle json-str or dict)
   Raises: InvalidGeoJson() if oject does not meet criteria for valid GeoJSON 
   Returns: dict representation of GeoJSON object
   """
@@ -51,6 +51,10 @@ def validate_geojson(obj):
   ##  => {}, [], etc. (valid json)
   if not obj:
     raise InvalidGeoJson("Invalid GeoJSON format: empty object") 
+
+  ## If input is dict, translate to json
+  if isinstance(obj, dict):
+    obj = json.dumps(obj)
 
   ## basic json validation - is obj a valid JSON object?
   try:
@@ -119,7 +123,7 @@ def get_polygon_union(*polys):
   Identify union of two or more polygons
   Required Args (json): 2 or more polygons in GeoJSON format
   Raises: MethodInputError() if less than two GeoJSON objects
-  Return (json): if output of union() is type=Polygon there is a union: return {'union': PolyObject}
+  Return (dict): if output of union() is type=Polygon there is a union: return {'union': PolyObject}
                  if output is type=MultiPolygon there is NOT a union: return {'union': 0}
   """
   d_response = {'union': 0} ## use zero since some json libs don't like None/NULL/False
@@ -148,9 +152,7 @@ def get_polygon_union(*polys):
   elif type == 'Polygon': 
     d_response['union'] = d_union
  
-  json_resp = json.dumps(d_response) 
-
-  return(json_resp)
+  return(d_response)
 
 ##----------------------------------------------------------------------------------------------
 if __name__ == '__main__':

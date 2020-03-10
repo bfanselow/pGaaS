@@ -1,10 +1,5 @@
 """
 
-  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  CURRENTLY NOT USED: Data-validation is done by the polygon_geomtery.py module.
-  TODO: Move some basic validation into this for faster fails
-  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- 
   Module: api_authorization.py
   Description: 
    API authorization based on simple api-key validation to be used by the API endpoints.  
@@ -21,12 +16,13 @@
          specify uniq endpoint=<endpoint> names in the route() args
  
 """
+import json
+
 ## Flask modules
 from functools import wraps
 from flask import request, current_app
 
-api_key = 'asdfasdfasdf'
- 
+
 ##-----------------------------------------------------------------------------------------
 class ApiAuthorizationError(Exception):
   pass
@@ -39,6 +35,7 @@ def validate_api_key(request, d_data):
       * d_data (dict): request payload data.
     Raises: ApiAuthorizationError if validation error.
   """
+  api_key = current_app.config['API_KEY'] 
   request_api_key = None
   if 'api_key' in d_data:
     request_api_key = d_data['api_key']
@@ -47,9 +44,6 @@ def validate_api_key(request, d_data):
 
   if not request_api_key:
     raise ApiAuthorizationError("API request authorization failed: no api-key in payload or headers")
-
-  if admin_req and not is_admin:
-    raise ApiAuthorizationError("API request authorization failed - User (%s) is not an admin" % (request_user))
 
   if request_api_key != api_key:
     raise ApiAuthorizationError("API request authorization failed - Invalid API-Key for user (%s)" % (request_user))
@@ -67,9 +61,11 @@ def api_authorize(func):
     ##print( "\nSTART DECORATOR: validate_payload %s" % (str(kwargs)))
     if request is None: 
       raise ApiAuthorizationError("%s: Empty request object" % (tag))
-    d_payload = request.get_json() 
-    if not d_payload:
-      raise ApiAuthorizationError("%s: Request payload is not valid json" % (tag))
+    d_payload = request.get_json(force=True) 
+    try:
+      json_payload = json.dumps(d_payload)
+    except Exception as e:
+      raise ApiAuthorizationError("%s: Request payload is not valid json: %s" % (tag, e))
     try:
       validate_api_key(request, d_payload)
     except Exception as e:
