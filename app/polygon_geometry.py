@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 
-  File; polygon_geometry.py 
+  File: polygon_geometry.py 
   Description: Simple polygon geometry methods using GeoJSON inputs
   Requires: 
     pip install shapely
@@ -20,9 +20,6 @@ DEBUG = 0 ## make sure this is 0 before deploying to service
 
 ##----------------------------------------------------------------------------------------------
 class InvalidGeoJson(Exception):
-  pass
- 
-class InvalidUnion(Exception):
   pass
  
 ##----------------------------------------------------------------------------------------------
@@ -95,7 +92,7 @@ def check_polygon_intersection(poly_1, poly_2):
   """
   Identify if two polygons intersect or not.
   Required Args (json): 2 polygons in GeoJSON format
-  Return (bool): True|False
+  Return (dict): {"intersects": (0|1)} 
   """
 
   ## validate format and convert to dict
@@ -112,7 +109,7 @@ def check_polygon_intersection(poly_1, poly_2):
 
   shape_1 = shape(d_poly_1)
   shape_2 = shape(d_poly_2)
-  result = shape_1.intersects(shape_2)
+  result = shape_1.intersects(shape_2) ## => True|False
 
   if result:
     d_response = {'intersects': 1}
