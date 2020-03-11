@@ -55,7 +55,7 @@ See pgass_flask.wsgi
 ## Testing
 ### Test the GeoJSON computational methods with pytest
 ```
-## from pGaaS dir
+## from pGaaS dir (will run all test_* files in tests/ dir)
 (venv) $ python -m pytest -v
 ```
 ### Test the Flask web-service 
