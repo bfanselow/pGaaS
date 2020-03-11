@@ -18,14 +18,14 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
 {"union":{"coordinates":[[[1219317.0,624154.0],[1231345.0,624154.0],[1231345.0,601260.0],[1208064.0,601260.0],[1208064.0,614453.0],[1199915.0,614453.0],[1199915.0,633079.0],[1219317.0,633079.0],[1219317.0,624154.0]]],"type":"Polygon"}}
 ```
 
-## Requirements:
+## Requirements
  * geojson==2.5.0
  * Shapely==1.7.0
  * pytest==5.3.5
  * Flask==1.1.1 (auto-installs lots of other pkgs)
 
-## Notes:
-* Engine for all GeoJSON work is **app/polygon_geometry.py** 
+## Notes
+* Engine for all GeoJSON computation is: **app/polygon_geometry.py** 
 * You must include a "dummy" API key **{ "api_key":"fanselow-pgass-test"}** in all POST payloads, or in the HEADER {"X-Api-Key":"fanselow-pgass-test"}.  Obvioulsy, as is, this provides no real security, but serves a placeholder for future Security capability. 
 * Shapley appears to not enforce the August 2016 (GeoJSON) IETF specification - validating objects from the old informal 2008 spec.  Some of the GeoJSON objects used in testing will pass validation but should techncially fail the "right-hand rule". 
 * GeoJSON files for states (colorado, wyoming, montana) used for pytests sourced from https://eric.clst.org/tech/usgeojson/
