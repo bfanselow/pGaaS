@@ -42,6 +42,14 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
  $ pip install -r requirements.txt
 ```
 
+### Run the Flask DEV server (NOT for production!!)
+```
+(venv) $ python app/pgass_flask.py
+```
+
+### Run with WSGI in Apache 
+See pgass_flask.wsgi 
+
 ## Testing
 ### Test the GeoJSON computational methods with pytest
 ```
@@ -53,14 +61,6 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
 ## from pGaaS dir (with service running!)
 (venv) $ ./pgass_test.sh
 ```
-
-### Run the Flask DEV server (NOT for production!!)
-```
-(venv) $ python app/pgass_flask.py
-```
-
-### Run with WSGI in Apache 
-See pgass_flask.wsgi 
 
 ## Example REQUESTS/RESPONSES (failures and successes):
 **GET (i.e. no  payload)** 
