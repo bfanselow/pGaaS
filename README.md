@@ -2,7 +2,7 @@
 
 ## Polygon-Geometry-as-a-Service
 
-Simple service to perform polygon-geometry operations
+###Simple (Python3/Flask) service to perform polygon-geometry operations
  1) **intersection** of 2 polygons (in GeoJSON format): returns {"intersection":(0|1)}
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[1199915, 633079], [1199915, 614453], [1219317, 614453], [1219317, 633079], [1199915, 633079]]] } ]}' http://127.0.0.1:8080/api/polygon_intersection
@@ -40,12 +40,12 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
 
 ### Testing all test-files in tests/ dir
 ```
-## from pGaas dir
+## from pGaaS dir
 (venv) $ python -m pytest -v
 ```
 ### Run the Flask DEV server (NOT for production!!)
 ```
-python app/pgass_flask.py
+(venv) $ python app/pgass_flask.py
 ```
 
 ### Run with WSGI in Apache 
