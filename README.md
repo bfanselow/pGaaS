@@ -13,7 +13,7 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
   
  2) **Overlap Area** of 2 polygons.  
     Endpoint:  *api/polygon_overlap_area*   
-    Returns overlap area (if any) of the two polygons: {"overlap_area": __float__}
+    Returns overlap area (if any) of the two polygons: {"overlap_area": _float_}
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]]] } ]}' http://127.0.0.1:8080/api/polygon_overlap_area
 {"overlap_area":0.0}
