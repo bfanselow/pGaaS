@@ -52,7 +52,7 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
 See pgass_flask.wsgi 
 
 ## Example REQUESTS/RESPONSES (failures and successes):
-**GET (Empty payload)** 
+**GET (i.e. no  payload)** 
 ```
 $ curl http://127.0.0.1:8080/api/polygon_union
 {"error":{"exception":"ApiAuthorizationError","message":"api_authorize: Request payload is not valid json","timestamp":"2020-03-10 19:31:38"}}
