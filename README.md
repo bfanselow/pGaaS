@@ -39,7 +39,8 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
  $ git clone https://github.com/bfanselow/pGaaS.git
  $ cd pGaaS/
  $ virtualenv -p python3 venv
- $ pip install -r requirements.txt
+ $ source venv/bin/activate
+ (venv) $ pip install -r requirements.txt
 ```
 
 ### Run the Flask DEV server (NOT for production!!)
