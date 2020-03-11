@@ -148,7 +148,7 @@ if __name__ == '__main__':
 
   ##
   ## Some simple tests of the functions
-  ## See /tests/test_polygon_geometry.py for testing BAD json/geojson)
+  ## See /tests/test_* for more thorough testing
   ##
 
   ##
