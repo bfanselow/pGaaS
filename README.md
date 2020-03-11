@@ -3,13 +3,16 @@
 ## Polygon-Geometry-as-a-Service
 
 ### Simple (Python3/Flask) service to perform polygon-geometry operations
- 1) **Intersection** of 2 polygons (in GeoJSON format): returns {"intersection":(0|1)}
+ 1) **Intersection** of 2 polygons (in GeoJSON format)
+    Returns {"intersection":(0|1)}
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[1199915, 633079], [1199915, 614453], [1219317, 614453], [1219317, 633079], [1199915, 633079]]] } ]}' http://127.0.0.1:8080/api/polygon_intersection
 {"intersection":1}
 ```
   
- 2) **Overlap** of 2+ polygons: returns {"overlap":0} if the union of polygons is NOT a Polygon (i.e. no overlap), or {"overlap":{ __GeoJSON-PolygonObj__ }} if the union is a Polygon (some overlap).
+ 2) **Overlap** of 2+ polygons 
+    Returns {"overlap":0} if the union of polygons is NOT a Polygon (i.e. no overlap), or {"overlap":{ __GeoJSON-PolygonObj__ }} if the union is a Polygon (some overlap).  
+   **TODO: Could be misleading that this is NOT returning the *area* of overlap. but rather the *union* if there is overlap**.
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]]] } ]}' http://127.0.0.1:8080/api/polygon_overlap
 {"overlap":0}
