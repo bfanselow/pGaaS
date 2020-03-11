@@ -47,6 +47,7 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
 ```
 ## from pGaaS dir
 (venv) $ python -m pytest -v
+```
 ### Test the Flask web-service 
 ```
 ## from pGaaS dir (with service running!)
