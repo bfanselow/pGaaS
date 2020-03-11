@@ -25,9 +25,9 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
  * Flask==1.1.1 (auto-installs lots of other pkgs)
 
 ## Notes
-* Engine for all GeoJSON computation is: **app/polygon_geometry.py** 
+* Engine for all GeoJSON computations: **app/polygon_geometry.py** 
 * You must include a "dummy" API key **{ "api_key":"fanselow-pgass-test"}** in all POST payloads, or in the HEADER {"X-Api-Key":"fanselow-pgass-test"}.  Obvioulsy, as is, this provides no real security, but serves a placeholder for future Security capability. 
-* Shapley appears to not enforce the August 2016 (GeoJSON) IETF specification - validating objects from the old informal 2008 spec.  Some of the GeoJSON objects used in testing will pass validation but should techncially fail the "right-hand rule". 
+* Shapley appears to not enforce the (2016) IETF GeoJSON specification - validating objects from the old informal 2008 spec.  Some of the GeoJSON objects used in testing will pass validation but should techncially fail the "right-hand rule". 
 * GeoJSON files for states (colorado, wyoming, montana) used for pytests sourced from https://eric.clst.org/tech/usgeojson/
 
 ## Setup
