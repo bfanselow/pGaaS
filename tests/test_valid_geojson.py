@@ -6,7 +6,7 @@
 """
 import json
 import pytest
-from app.polygon_geometry import check_polygon_intersection, get_polygon_union
+from app.polygon_geometry import check_polygon_intersection, get_polygon_overlap
 
 POLY_1 = '{"type": "Polygon", "coordinates": [[[ 100.0, 0.0 ], [ 101.0, 0.0 ], [ 101.0, 1.0 ], [ 100.0, 1.0 ], [ 100.0, 0.0 ]]]}'
 POLY_2 = '{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }'
@@ -26,8 +26,8 @@ def test_polygon_NON_intersection():
     assert result == False 
 
 ##------------------------------------------------------------------------
-def test_colorado_wyoming_union():
-    ## Test get_polygon_union() with two adjecent state polygon objects 
+def test_colorado_wyoming_overlap():
+    ## Test get_polygon_overlap() with two adjecent state polygon objects 
 
     with open('./tests/colorado.json', 'r') as f_colorado:
       d_colorado = json.load(f_colorado)
@@ -40,8 +40,8 @@ def test_colorado_wyoming_union():
       result = check_polygon_intersection(json_colorado, json_wyoming) 
       assert result == True
 ##------------------------------------------------------------------------
-def test_colorado_montana_union():
-    ## Test get_polygon_union() with two non-adjecent state polygon objects 
+def test_colorado_montana_overlap():
+    ## Test get_polygon_overlap() with two non-adjecent state polygon objects 
 
     with open('./tests/colorado.json', 'r') as f_colorado:
       d_colorado = json.load(f_colorado)

@@ -12,10 +12,10 @@
 
   Usage: Use as a route decorator AFTER @api_authorize decorator. 
   Example:
-     @api_blueprint.route("/api/polygon_union",  methods=['POST'])
+     @api_blueprint.route("/api/polygon_overlap",  methods=['POST'])
      @api_authorize
      @api_data_validate
-     def polygon_union():
+     def polygon_overlap():
      ...
 
   Notes: to use the same api_data_validate() decorator on multiple routes you must include

@@ -48,19 +48,19 @@ def polygon_intersection():
   return(result)
 
 ##---------------------------------------------------------------------------------------
-## POST request to calculate union between 2 or more polygons 
-@bp_api.route("/api/polygon_union",  methods=['GET', 'POST'], endpoint='polygon-union' )
+## POST request to calculate overlap between 2 or more polygons 
+@bp_api.route("/api/polygon_overlap",  methods=['GET', 'POST'], endpoint='polygon-overlap' )
 @api_authorize
 @api_data_validate
-def polygon_union():
-  tag = "%s.polygon_union()" % blueprint_id
+def polygon_overlap():
+  tag = "%s.polygon_overlap()" % blueprint_id
   d_request_data = request.get_json(force=True)
 
-  #print("%s: Getting union of polygons: %s" % (tag, str(d_request_data)))
+  #print("%s: Getting overlap of polygons: %s" % (tag, str(d_request_data)))
 
   l_polygons = d_request_data['polygons'] ## already validated existence
 
-  d_result = polygon_geometry.get_polygon_union(*l_polygons) ## => dict 
+  d_result = polygon_geometry.get_polygon_overlap(*l_polygons) ## => dict 
   result = jsonify(d_result)
 
   return(result)

@@ -118,15 +118,15 @@ def check_polygon_intersection(poly_1, poly_2):
   return(result)
 
 ##----------------------------------------------------------------------------------------------
-def get_polygon_union(*polys):
+def get_polygon_overlap(*polys):
   """
-  Identify union of two or more polygons
+  Identify overlap of two or more polygons - identify if union is a Polygon (i.e. some overlap)
   Required Args (json): 2 or more polygons in GeoJSON format
   Raises: MethodInputError() if less than two GeoJSON objects
-  Return (dict): if output of union() is type=Polygon there is a union: return {'union': PolyObject}
-                 if output is type=MultiPolygon there is NOT a union: return {'union': 0}
+  Return (dict): if output of unary_union() is type=Polygon there is an overlap: return {'overlap': PolyObject}
+                 if output is type=MultiPolygon there is NOT an overlap: return {'overlap': 0}
   """
-  d_response = {'union': 0} ## use zero since some json libs don't like None/NULL/False
+  d_response = {'overlap': 0} ## use zero since some json libs don't like None/NULL/False
 
   if len(polys) < 2:
     raise MethodInputError("Method requires 2 or more polygon input args")
@@ -150,7 +150,7 @@ def get_polygon_union(*polys):
   if type is None:
     raise InvalidUnion("Invalid response from mapping(unary_union()): Missing key=type")
   elif type == 'Polygon': 
-    d_response['union'] = d_union
+    d_response['overlap'] = d_union
  
   return(d_response)
 
@@ -187,14 +187,14 @@ if __name__ == '__main__':
 
   print("\nGetting union of two non-overlapping poly's...")
   try:
-    result = get_polygon_union(poly1, poly2) 
+    result = get_polygon_overlap(poly1, poly2) 
     print("RESULT: %s" % (result))
   except Exception as e:
     raise 
 
   print("\nGetting union of two overlapping poly's...")
   try:
-    result = get_polygon_union(poly2, poly3) 
+    result = get_polygon_overlap(poly2, poly3) 
     print("RESULT: %s" % (result))
   except Exception as e:
     raise 

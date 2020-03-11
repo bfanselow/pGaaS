@@ -7,9 +7,9 @@
 
   Usage: Use as a route decorator for api-methods needing immediate input validation.
   Example:
-     @api_blueprint.route("/api/polygon_union",  methods=['POST'])
+     @api_blueprint.route("/api/polygon_overlap",  methods=['POST'])
      @api_authorize
-     def polygon_union():
+     def polygon_overlap():
      ...
 
   Notes: to use the same api_authorization() decorator on multiple routes you must include
