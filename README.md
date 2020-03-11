@@ -48,7 +48,9 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
 ```
 
 ### Run with WSGI in Apache 
+```
 See pgass_flask.wsgi 
+```
 
 ## Testing
 ### Test the GeoJSON computational methods with pytest
