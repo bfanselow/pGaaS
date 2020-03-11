@@ -64,6 +64,13 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{}' http://127.0.0.1:8080/ap
 {"error":{"exception":"ApiAuthorizationError","message":"API request authorization failed: no api-key in payload or headers","timestamp":"2020-03-10 21:11:22"}}
 ```
 
+**GET (unsupported endpoint)**
+```
+$ curl http://127.0.0.1:8080/api/bogus_endpoint
+{"error":{"message":"Requested URL (http://127.0.0.1:8080/api/bogus_endpoint) not supported"}}
+```
+
+
 **POST (No API key)** 
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"hello":"bill"}' http://127.0.0.1:8080/api/polygon_overlap
