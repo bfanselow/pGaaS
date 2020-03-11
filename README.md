@@ -42,11 +42,17 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
  $ pip install -r requirements.txt
 ```
 
-### Testing all test-files in tests/ dir
+## Testing
+### Test the GeoJSON computational methods with pytest
 ```
 ## from pGaaS dir
 (venv) $ python -m pytest -v
+### Test the Flask web-service 
 ```
+## from pGaaS dir (with service running!)
+(venv) $ ./pgass_test.sh
+```
+
 ### Run the Flask DEV server (NOT for production!!)
 ```
 (venv) $ python app/pgass_flask.py
