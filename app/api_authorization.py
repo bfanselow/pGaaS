@@ -62,6 +62,7 @@ def api_authorize(func):
     if request is None: 
       raise ApiAuthorizationError("%s: Empty request object" % (tag))
     d_payload = request.get_json(force=True) 
+    ##print("PAYLOAD: %s" % str(d_payload))
     try:
       json_payload = json.dumps(d_payload)
     except Exception as e:

@@ -33,34 +33,31 @@ def polygon_intersection():
   l_polygons = d_request_data['polygons'] ## already validated existence
   poly_1 = l_polygons[0]
   poly_2 = l_polygons[1]
-  ## TODO: should validate that user only passed in two. We are validating 2 or more, but ignoring items > 2
 
   #print(poly_1)
   #print(poly_2)
 
-  d_result = {"intersection": 0} 
-
-  result = polygon_geometry.check_polygon_intersection(poly_1, poly_2) ## => (True|False)
-  if result:
-    d_result["intersection"] = 1 
+  d_result = polygon_geometry.check_polygon_intersection(poly_1, poly_2) ## => dict
  
   result = jsonify(d_result)
   return(result)
 
 ##---------------------------------------------------------------------------------------
-## POST request to calculate overlap between 2 or more polygons 
-@bp_api.route("/api/polygon_overlap",  methods=['GET', 'POST'], endpoint='polygon-overlap' )
+## POST request to calculate overlap area between 2 polygons 
+@bp_api.route("/api/polygon_overlap_area",  methods=['GET', 'POST'], endpoint='polygon-overlap' )
 @api_authorize
 @api_data_validate
-def polygon_overlap():
-  tag = "%s.polygon_overlap()" % blueprint_id
+def polygon_overlap_area():
+  tag = "%s.polygon_overlap_area()" % blueprint_id
   d_request_data = request.get_json(force=True)
 
-  #print("%s: Getting overlap of polygons: %s" % (tag, str(d_request_data)))
+  #print("%s: Getting overlap-area of polygons: %s" % (tag, str(d_request_data)))
 
   l_polygons = d_request_data['polygons'] ## already validated existence
+  poly_1 = l_polygons[0]
+  poly_2 = l_polygons[1]
 
-  d_result = polygon_geometry.get_polygon_overlap(*l_polygons) ## => dict 
+  d_result = polygon_geometry.get_overlap_area(poly_1, poly_2) ## => dict 
   result = jsonify(d_result)
 
   return(result)

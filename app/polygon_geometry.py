@@ -19,9 +19,6 @@ from shapely.ops import unary_union
 DEBUG = 0 ## make sure this is 0 before deploying to service 
 
 ##----------------------------------------------------------------------------------------------
-class MethodInputError(Exception):
-  pass
-
 class InvalidGeoJson(Exception):
   pass
  
@@ -110,48 +107,43 @@ def check_polygon_intersection(poly_1, poly_2):
     d_poly_2 = validate_geojson(poly_2)
   except Exception as e:
     raise 
+  
+  d_response = {'intersects': 0}
 
   shape_1 = shape(d_poly_1)
   shape_2 = shape(d_poly_2)
   result = shape_1.intersects(shape_2)
 
-  return(result)
+  if result:
+    d_response = {'intersects': 1}
+
+  return(d_response)
 
 ##----------------------------------------------------------------------------------------------
-def get_polygon_overlap(*polys):
+def get_overlap_area(poly_1, poly_2):
   """
-  Identify overlap of two or more polygons - identify if union is a Polygon (i.e. some overlap)
-  Required Args (json): 2 or more polygons in GeoJSON format
-  Raises: MethodInputError() if less than two GeoJSON objects
-  Return (dict): if output of unary_union() is type=Polygon there is an overlap: return {'overlap': PolyObject}
-                 if output is type=MultiPolygon there is NOT an overlap: return {'overlap': 0}
+  Identify area of overlap of two polygons
+  Required Args (json): 2 polygons in GeoJSON format
+  Return (dict): {'overlap_area': <float>} 
   """
-  d_response = {'overlap': 0} ## use zero since some json libs don't like None/NULL/False
+  
+  ## validate format and convert to dict
+  try:
+    d_poly_1 = validate_geojson(poly_1)
+  except Exception as e:
+    raise 
+  try:
+    d_poly_2 = validate_geojson(poly_2)
+  except Exception as e:
+    raise 
 
-  if len(polys) < 2:
-    raise MethodInputError("Method requires 2 or more polygon input args")
+  shape_1 = shape(d_poly_1)
+  shape_2 = shape(d_poly_2)
+  intersection = shape_1.intersection(shape_2)
 
-  geometries = []
-  for pg in polys:
-    ## validate format and convert to dict
-    try:
-      d_pg = validate_geojson(pg)
-    except Exception as e:
-      raise 
-    geom = shape(d_pg)
-    geometries.append(geom)
+  area = intersection.area
+  d_response = {'overlap_area': area}
 
-  union = unary_union( geometries )
-
-  ## convert union back to dict
-  d_union = mapping(union)
-
-  type = d_union.get('type', None)
-  if type is None:
-    raise InvalidUnion("Invalid response from mapping(unary_union()): Missing key=type")
-  elif type == 'Polygon': 
-    d_response['overlap'] = d_union
- 
   return(d_response)
 
 ##----------------------------------------------------------------------------------------------
@@ -185,16 +177,33 @@ if __name__ == '__main__':
   except Exception as e:
     raise 
 
-  print("\nGetting union of two non-overlapping poly's...")
+  print("\nGetting overlap area of two non-overlapping poly's...")
   try:
-    result = get_polygon_overlap(poly1, poly2) 
+    result = get_overlap_area(poly1, poly2) 
     print("RESULT: %s" % (result))
   except Exception as e:
     raise 
 
-  print("\nGetting union of two overlapping poly's...")
+  print("\nGetting overlap area of two overlapping poly's...")
   try:
-    result = get_polygon_overlap(poly2, poly3) 
+    result = get_overlap_area(poly2, poly3) 
     print("RESULT: %s" % (result))
   except Exception as e:
     raise 
+
+  with open('./data/colorado.json', 'r') as f_colorado:
+    d_colorado = json.load(f_colorado)
+    json_colorado = json.dumps(d_colorado)
+ 
+    with open('./data/wyoming.json', 'r') as f_wyoming:
+      d_wyoming = json.load(f_wyoming)
+      json_wyoming = json.dumps(d_wyoming)
+
+      print("\nTesting intersection of two adjecent states (colorado/wyoming)...")
+      result = check_polygon_intersection(json_colorado, json_wyoming) 
+      print("RESULT: %s" % (result))
+
+      print("\nGetting overlapping area of two adjecent states (colorado/wyoming)...")
+      result = get_overlap_area(json_colorado, json_wyoming) 
+      print("RESULT: %s" % (result))
+

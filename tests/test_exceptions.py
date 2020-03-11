@@ -4,7 +4,7 @@
 """
 
 import pytest
-from app.polygon_geometry import check_polygon_intersection, get_polygon_overlap, MethodInputError, InvalidGeoJson
+from app.polygon_geometry import check_polygon_intersection, get_overlap_area, InvalidGeoJson
 
 POLY_GOOD = '{"type": "Polygon", "coordinates": [[[ 100.0, 0.0 ], [ 101.0, 0.0 ], [ 101.0, 1.0 ], [ 100.0, 1.0 ], [ 100.0, 0.0 ]]]}'
 POLY_GOOD_2 = '{"type": "Polygon", "coordinates": [[[ 100.0, 2.0 ], [ 101.0, 2.0 ], [ 101.0, 5.0 ], [ 100.0, 5.0 ], [ 100.0, 0.0 ]]]}'
@@ -43,20 +43,13 @@ INVALID_TYPE = '{ "type": "Poli", "coordinates": [ [ [ 1208064, 624154 ], [ 1208
 TYPE_LINE_STR = '{ "type": "LineString", "coordinates": [ [ [ 1208064, 624154 ], [ 1208064, 601260 ], [ 1231345, 601260 ], [ 1231345, 624154 ], [ 1208064, 624154 ] ] ] }'
 
 ##------------------------------------------------------------------------
-def test_exception_on_invalid_input():
-    ## Test get_polygon_overlap() for raise(MethodInputError) on invalid method input (should be 2+ poly's) 
-    l_polys = [POLY_GOOD]
-    with pytest.raises(MethodInputError):
-        result = get_polygon_overlap(l_polys) 
-
-##------------------------------------------------------------------------
 def test_exception_on_invalid_geojson():
     ## Test check_polygon_intersection() for raise(InvalidGeoJson) on invalid GeoJSON format
     with pytest.raises(InvalidGeoJson):
         result = check_polygon_intersection(NON_POLY, POLY_GOOD) 
 
 ##------------------------------------------------------------------------
-## Test get_polygon_overlap() with multiple sets of inputs with BAD json or BAD geojson
+## Test get_overlap_area() with multiple sets of inputs with BAD json or BAD geojson
 ## All should raise InvalidGeoJson()
 @pytest.mark.parametrize("poly_bad, poly_good", [ 
    (POLY_GOOD, NULLSTR),
@@ -77,4 +70,4 @@ def test_exception_on_invalid_geojson():
 def test_exception_on_bad_geojson(poly_bad,poly_good):
     with pytest.raises(InvalidGeoJson):
         l_polys = [poly_bad, poly_good]
-        result = get_polygon_overlap(*l_polys) 
+        result = get_overlap_area(*l_polys) 

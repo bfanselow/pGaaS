@@ -7,7 +7,7 @@
 
    !!!!!!!!!!!!!!
    This does NOT attempt to validate GeoJSON data (which will be done by polygon_geometry.py)
-   It simply checks for the exists of a list of 2 or more objects in the "polygons" list.
+   It simply checks for the exists of a list of 2 objects in the "polygons" list.
    !!!!!!!!!!!!!!
 
   Usage: Use as a route decorator AFTER @api_authorize decorator. 
@@ -46,11 +46,11 @@ def api_data_validate(func):
     d_payload = request.get_json(force=True) 
     polygons = d_payload.get('polygons', None)
     if polygons is None:
-      raise ApiDataError("Request payload must contain a list of 2 or more polygons")
+      raise ApiDataError("Request payload must contain a list of 2 polygons")
     if not isinstance(polygons, list): 
-      raise ApiDataError("Request payload must contain a list of 2 or more polygons")
-    if len(polygons) < 2:
-      raise ApiDataError("Request payload must contain a list of 2 or more polygons")
+      raise ApiDataError("Request payload must contain a list of 2 polygons")
+    if len(polygons) != 2:
+      raise ApiDataError("Request payload must contain a list of 2 polygons")
  
     ret = func(**kwargs)
     ##print( "END DECORATOR: return %s\n" % (ret))
