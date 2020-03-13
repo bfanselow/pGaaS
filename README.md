@@ -47,7 +47,7 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
 ```
 (venv) $ python app/pgass_flask.py
 
-For running in a production setting (with Apache) see pgass_flask.wsgi 
+# For running in a production setting (with Apache) see pgass_flask.wsgi 
 ```
 
 ## Testing
