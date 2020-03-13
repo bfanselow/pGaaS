@@ -43,14 +43,11 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
  (venv) $ pip install -r requirements.txt
 ```
 
-### Run the Flask DEV server (NOT for production!!)
+### Run the Flask DEV server for testing (NOT for production!!)
 ```
 (venv) $ python app/pgass_flask.py
-```
 
-### Run with WSGI in Apache 
-```
-See pgass_flask.wsgi 
+For running in a production setting (with Apache) see pgass_flask.wsgi 
 ```
 
 ## Testing
