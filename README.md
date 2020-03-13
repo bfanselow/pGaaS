@@ -89,6 +89,12 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"hello":"bill"}' http://127
 {"error":{"exception":"ApiAuthorizationError","message":"API request authorization failed: no api-key in payload or headers","timestamp":"2020-03-10 20:07:51"}}
 ```
 
+**POST (Invalid API key)** 
+```
+$ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"pgass-test"}' http://127.0.0.1:8080/api/polygon_overlap_area
+{"error":{"exception":"ApiAuthorizationError","message":"API request authorization failed - Invalid API-Key: (pgass-test)","timestamp":"2020-03-13 16:57:51"}}
+```
+
 **POST (No "polygons" key)** 
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test"}' http://127.0.0.1:8080/api/polygon_overlap_area

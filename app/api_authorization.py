@@ -46,7 +46,7 @@ def validate_api_key(request, d_data):
     raise ApiAuthorizationError("API request authorization failed: no api-key in payload or headers")
 
   if request_api_key != api_key:
-    raise ApiAuthorizationError("API request authorization failed - Invalid API-Key for user (%s)" % (request_user))
+    raise ApiAuthorizationError("API request authorization failed - Invalid API-Key: (%s)" % (request_api_key))
 
 ##-----------------------------------------------------------------------------------------
 def api_authorize(func):

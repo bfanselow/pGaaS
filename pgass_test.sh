@@ -33,6 +33,13 @@ echo ""
 echo ""
 sleep 2
 
+## POST (Invalid API key)
+echo "Testing POST (invliad api key)..."
+curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"pgass-test"}' http://127.0.0.1:8080/api/polygon_overlap_area
+echo ""
+echo ""
+sleep 2
+
 ## POST (No "polygons" key)
 echo "Testing POST (no polygons list)..."
 $curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test"}' http://127.0.0.1:8080/api/polygon_overlap_area
