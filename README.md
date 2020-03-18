@@ -105,19 +105,19 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"pgass-test"}' ht
 **POST *api/polygon_overlap_area*** (No "polygons" key)
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test"}' http://127.0.0.1:8080/api/polygon_overlap_area
-{"error":{"exception":"ApiDataError","message":"Request payload must contain a list of 2 polygons","timestamp":"2020-03-10 20:28:31"}}
+{"error":{"exception":"ApiDataError","message":"Invalid request payload: : 'polygons' is a required property","timestamp":"2020-03-18 12:44:58"}}
 ```
 
 **POST *api/polygon_overlap_area*** (Only one polygon in "polygons" list)
 ```
 curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [ { "type": "Polygon", "coordinates": [[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]]] } ]}' http://127.0.0.1:8080/api/polygon_overlap_area
-{"error":{"exception":"ApiDataError","message":"Request payload must contain a list of 2 polygons","timestamp":"2020-03-11 17:24:46"}}
+{"error":{"exception":"ApiDataError","message":"Invalid request payload: Two GeoJSON objects required","timestamp":"2020-03-18 12:45:00"}}
 ```
 
 **POST *api/polygon_overlap_area*** (Invalid "polygons". See tests/ dir for more GeoJson validation tests)
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": ["foo", "bar"]}' http://127.0.0.1:8080/api/polygon_overlap_area
-{"error":{"exception":"InvalidGeoJson","message":"Invalid GeoJSON format: Expecting value: line 1 column 1 (char 0)","timestamp":"2020-03-10 20:39:28"}}
+{"error":{"exception":"ApiDataError","message":"Invalid request payload: polygons.0: 'foo' is not of type 'object'","timestamp":"2020-03-18 12:45:02"}}
 ```
 
 **POST *api/polygon_intersection*** (successful identification of intersection)
