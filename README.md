@@ -149,7 +149,7 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
 {"is_within":1}
 ```
 
-**POST *api/point_in_polygon* (successful identification of point-NOT-in-polygon)**
+**POST *api/point_in_polygon* ** (successful identification of point-NOT-in-polygon)
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygon": { "type": "Polygon", "coordinates": [[[24.950899, 60.169158], [24.953492, 60.169158], [24.953510, 60.170104], [24.950958, 60.169990], [24.950899, 60.169158]]] }, "point": { "type": "Point", "coordinates": [240.42, 10.17] } }' http://127.0.0.1:8080/api/point_in_polygon
 {"is_within":0}
