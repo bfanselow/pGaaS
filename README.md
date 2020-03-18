@@ -21,7 +21,7 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
 {"overlap_area":109165353.0}
 ```
  
- 3) **Point-in-polygon** - is point within (inside) polygon.  
+ 3) **Point-in-polygon** - is point within polygon boundry.  
     Endpoint:  *api/point_in_polygon*   
     POST Payload: 1 GeoJSON Polygon, 1 GeoJSON Point 
     Returns boolean identification of whether or not polygon contains point:  {"is_within":(1|0)}
