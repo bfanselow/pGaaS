@@ -22,6 +22,9 @@
          specify uniq endpoint=<endpoint> names in the route() args
  
 """
+import json
+import jsonschema
+
 ## Flask modules
 from functools import wraps
 from flask import request, current_app
@@ -31,28 +34,36 @@ class ApiDataError(Exception):
   pass
 
 ##-----------------------------------------------------------------------------------------
-def api_data_validate(func):
+def api_data_validate(d_json_schema):
   """
     Decorator function for API request payload schema validation. Must be positioned AFTER @api_authorize. 
     Expects flask.request object in JSON format. 
     Raises: ApiDataError if validation error
     Return True
   """
-  @wraps(func)
-  def wrapper(**kwargs):
-    ##print( "\nSTART DECORATOR: validate_schema %s" % (str(kwargs)))
-    if request is None: 
-      raise ApiDataError("Empty request object")
-    d_payload = request.get_json(force=True) 
-    polygons = d_payload.get('polygons', None)
-    if polygons is None:
-      raise ApiDataError("Request payload must contain a list of 2 polygons")
-    if not isinstance(polygons, list): 
-      raise ApiDataError("Request payload must contain a list of 2 polygons")
-    if len(polygons) != 2:
-      raise ApiDataError("Request payload must contain a list of 2 polygons")
+  def data_validate(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+      ##print( "\nSTART DECORATOR: json_schema: %s" % (str(d_json_schema)))
+      if request is None: 
+        raise ApiDataError("Empty request payload")
+      d_payload = request.get_json(force=True) 
+
+      try:
+        jsonschema.validate(d_payload, d_json_schema)
+        print("Validation success!")
+      except jsonschema.exceptions.ValidationError as e:
+        if "error" in e.schema:
+          err = e.schema["error"]
+        else:
+          err = "%s: %s" % ( '.'.join(map(str,list(e.absolute_path))), e.message)
+        raise ApiDataError("Invalid request payload: %s" % (err))
+      except Exception as e:
+        raise ApiDataError("Invalid request payload - Unexpected jsonschema exception: %s" % (e))
+        raise
  
-    ret = func(**kwargs)
-    ##print( "END DECORATOR: return %s\n" % (ret))
-    return ret 
-  return wrapper
+      ret = func(*args, **kwargs)
+      ##print( "END DECORATOR: return %s\n" % (ret))
+      return( ret )
+    return wrapper
+  return data_validate 
