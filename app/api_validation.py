@@ -36,10 +36,12 @@ class ApiDataError(Exception):
 ##-----------------------------------------------------------------------------------------
 def api_data_validate(d_json_schema):
   """
-    Decorator function for API request payload schema validation. Must be positioned AFTER @api_authorize. 
-    Expects flask.request object in JSON format. 
-    Raises: ApiDataError if validation error
-    Return True
+   Decorator function for API request payload schema validation. Must be positioned AFTER @api_authorize.
+     Uses jsonschema to validate that the request data from API payload has valid top-level parameters.
+     Deeper GeoJSON validation performed by app/polygon_geometry module.
+   Required Arg: jsonschema object in dict format. 
+   Raises: ApiDataError if validation error
+   Return True
   """
   def data_validate(func):
     @wraps(func)
@@ -51,7 +53,7 @@ def api_data_validate(d_json_schema):
 
       try:
         jsonschema.validate(d_payload, d_json_schema)
-        print("Validation success!")
+        ##print("Validation success!")
       except jsonschema.exceptions.ValidationError as e:
         if "error" in e.schema:
           err = e.schema["error"]
