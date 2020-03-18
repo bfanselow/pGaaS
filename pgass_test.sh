@@ -85,3 +85,18 @@ sleep 2
 ## POST (successful identification of NON-overlap)
 echo "Testing POST (polygon non-overlap)..."
 $curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]]] } ]}' http://127.0.0.1:8080/api/polygon_overlap_area
+echo ""
+echo ""
+sleep 2
+
+## POST (successful identification of point-in-polygon)
+echo "Testing POST (point-in-polygon)..."
+$curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygon": { "type": "Polygon", "coordinates": [[[24.950899, 60.169158], [24.953492, 60.169158], [24.953510, 60.170104], [24.950958, 60.169990], [24.950899, 60.169158]]] }, "point": { "type": "Point", "coordinates": [24.952242, 60.1696017] } }' http://127.0.0.1:8080/api/point_in_polygon
+echo ""
+echo ""
+sleep 2
+
+## POST (successful identification of point-NOT-in-polygon)
+echo "Testing POST (point-NOT-in-polygon)..."
+$curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygon": { "type": "Polygon", "coordinates": [[[24.950899, 60.169158], [24.953492, 60.169158], [24.953510, 60.170104], [24.950958, 60.169990], [24.950899, 60.169158]]] }, "point": { "type": "Point", "coordinates": [240.42, 10.17] } }' http://127.0.0.1:8080/api/point_in_polygon
+
