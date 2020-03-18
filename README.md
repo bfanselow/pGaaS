@@ -73,83 +73,83 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
 ```
 
 ## Example REQUESTS/RESPONSES (failures and successes):
-**GET (i.e. no  payload)** 
+**GET *api/polygon_overlap_area* (i.e. no  payload)** 
 ```
 $ curl http://127.0.0.1:8080/api/polygon_overlap_area
 {"error":{"exception":"ApiAuthorizationError","message":"api_authorize: Request payload is not valid json","timestamp":"2020-03-10 19:31:38"}}
 ```
-**GET (unsupported endpoint)**
+**GET *api/bogus_endpoint* (unsupported endpoint)**
 ```
 $ curl http://127.0.0.1:8080/api/bogus_endpoint
 {"error":{"message":"Requested URL (http://127.0.0.1:8080/api/bogus_endpoint) not supported"}}
 ```
 
-**POST (Empty payload)** 
+**POST *api/polygon_intersection* (Empty payload)** 
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{}' http://127.0.0.1:8080/api/polygon_intersection
 {"error":{"exception":"ApiAuthorizationError","message":"API request authorization failed: no api-key in payload or headers","timestamp":"2020-03-10 21:11:22"}}
 ```
 
-**POST (No API key)** 
+**POST  *api/polygon_overlap_area* (No API key)** 
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"hello":"bill"}' http://127.0.0.1:8080/api/polygon_overlap_area
 {"error":{"exception":"ApiAuthorizationError","message":"API request authorization failed: no api-key in payload or headers","timestamp":"2020-03-10 20:07:51"}}
 ```
 
-**POST (Invalid API key)** 
+**POST *api/polygon_overlap_area* (Invalid API key)** 
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"pgass-test"}' http://127.0.0.1:8080/api/polygon_overlap_area
 {"error":{"exception":"ApiAuthorizationError","message":"API request authorization failed - Invalid API-Key: (pgass-test)","timestamp":"2020-03-13 16:57:51"}}
 ```
 
-**POST (No "polygons" key)** 
+**POST *api/polygon_overlap_area* (No "polygons" key)** 
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test"}' http://127.0.0.1:8080/api/polygon_overlap_area
 {"error":{"exception":"ApiDataError","message":"Request payload must contain a list of 2 polygons","timestamp":"2020-03-10 20:28:31"}}
 ```
 
-**POST (Only one polygon in "polygons" list)**
+**POST *api/polygon_overlap_area* (Only one polygon in "polygons" list)**
 ```
 curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [ { "type": "Polygon", "coordinates": [[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]]] } ]}' http://127.0.0.1:8080/api/polygon_overlap_area
 {"error":{"exception":"ApiDataError","message":"Request payload must contain a list of 2 polygons","timestamp":"2020-03-11 17:24:46"}}
 ```
 
-**POST (Invalid "polygons". See tests/ dir for more GeoJson validation tests)** 
+**POST *api/polygon_overlap_area* (Invalid "polygons". See tests/ dir for more GeoJson validation tests)** 
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": ["foo", "bar"]}' http://127.0.0.1:8080/api/polygon_overlap_area
 {"error":{"exception":"InvalidGeoJson","message":"Invalid GeoJSON format: Expecting value: line 1 column 1 (char 0)","timestamp":"2020-03-10 20:39:28"}}
 ```
 
-**POST (successful identification of intersection)** 
+**POST *api/polygon_intersection*  (successful identification of intersection)** 
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[1199915, 633079], [1199915, 614453], [1219317, 614453], [1219317, 633079], [1199915, 633079]]] } ]}' http://127.0.0.1:8080/api/polygon_intersection
 {"intersects":1}
 ```
-**POST (successful identification of NON-intersection)** 
+**POST *api/polygon_intersection* (successful identification of NON-intersection)** 
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]]] } ]}' http://127.0.0.1:8080/api/polygon_intersection
 {"intersects":0}
 ```
 
-**POST (successful identification of overlap)** 
+**POST *api/polygon_overlap_area* (successful identification of overlap)** 
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[1199915, 633079], [1199915, 614453], [1219317, 614453], [1219317, 633079], [1199915, 633079]]] } ]}' http://127.0.0.1:8080/api/polygon_overlap_area
 {"overlap_area":109165353.0}
 ```
 
-**POST (successful identification of NON-overlap)** 
+**POST *api/polygon_overlap_area* (successful identification of NON-overlap)** 
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]]] } ]}' http://127.0.0.1:8080/api/polygon_overlap
 {"overlap_area":0.0}
 ```
 
-**POST (successful identification of point-in-polygon)
+**POST *api/point_in_polygon* (successful identification of point-in-polygon)**
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygon": { "type": "Polygon", "coordinates": [[[24.950899, 60.169158], [24.953492, 60.169158], [24.953510, 60.170104], [24.950958, 60.169990], [24.950899, 60.169158]]] }, "point": { "type": "Point", "coordinates": [24.952242, 60.1696017] } }' http://127.0.0.1:8080/api/point_in_polygon
 {"is_within":1}
 ```
 
-**POST (successful identification of point-NOT-in-polygon)
+**POST *api/point_in_polygon* (successful identification of point-NOT-in-polygon)**
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygon": { "type": "Polygon", "coordinates": [[[24.950899, 60.169158], [24.953492, 60.169158], [24.953510, 60.170104], [24.950958, 60.169990], [24.950899, 60.169158]]] }, "point": { "type": "Point", "coordinates": [240.42, 10.17] } }' http://127.0.0.1:8080/api/point_in_polygon
 {"is_within":0}
