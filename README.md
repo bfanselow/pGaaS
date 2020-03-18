@@ -24,7 +24,7 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
  3) **Point-in-polygon** - is point within polygon boundry.  
     - Endpoint:  *api/point_in_polygon*   
     - POST Payload: 1 GeoJSON Polygon, 1 GeoJSON Point   
-    - Returns boolean identification of whether or not polygon contains point:  {"is_within":(1|0)}
+    - Returns boolean identification of whether or not point is within polygon boundry:  {"is_within":(1|0)}
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygon": { "type": "Polygon", "coordinates": [[[24.950899, 60.169158], [24.953492, 60.169158], [24.953510, 60.170104], [24.950958, 60.169990], [24.950899, 60.169158]]] }, "point": { "type": "Point", "coordinates": [24.952242, 60.1696017] } }' http://127.0.0.1:8080/api/point_in_polygon
 {"is_within":1}
