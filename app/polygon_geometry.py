@@ -29,15 +29,15 @@ def dprint(level, msg):
     print("DEBUG (%d): %s" % (level, msg))
 
 ##----------------------------------------------------------------------------------------------
-def validate_geojson(obj):
+def basic_json_validation(obj):
   """
-  Validate that input object is a valid json and has valid GeoJSON format for a Polygon.
-  Required Arg (json|dict): polygon object in GeoJSON format (we can handle json-str or dict)
-  Raises: InvalidGeoJson() if oject does not meet criteria for valid GeoJSON 
-  Returns: dict representation of GeoJSON object
+  Basic validation that input object is a valid json object.
+  Required Arg (json|dict): GeoJSON object (we can handle json-str or dict)
+  Raises: InvalidGeoJson() if object does not meet criteria for valid JSON object 
+  Returns: dict representation of GeoJSON object 
   """
 
-  d_poly = None
+  d_obj = None
 
   ## handle "empty" objects before regular json validation: 
   ##  => '' (invalid json)
@@ -52,7 +52,7 @@ def validate_geojson(obj):
 
   ## basic json validation - is obj a valid JSON object?
   try:
-    d_poly = json.loads(obj)
+    d_obj = json.loads(obj)
   except TypeError as e:
     raise InvalidGeoJson("Invalid GeoJSON format: not a valid json") 
   except json.decoder.JSONDecodeError as e:
@@ -60,7 +60,64 @@ def validate_geojson(obj):
   except Exception as e:
     raise 
  
-  ## GeoJSON validation
+  return( d_obj )
+ 
+##----------------------------------------------------------------------------------------------
+def validate_geojson_point(obj):
+  """
+  Validate that input object is a valid json and has valid GeoJSON format for a "Point".
+  Required Arg (json|dict): GeoJSON Point object (we can handle json-str or dict)
+  Raises: InvalidGeoJson() if object does not meet criteria for valid GeoJSON Point
+  Returns: dict representation of GeoJSON Point 
+  """
+
+  d_point = None
+
+  ## basic json validation
+  try:
+    d_point = basic_json_validation(obj)
+  except Exception as e:
+    raise 
+  
+  ## GeoJSON Point validation
+  point = geojson.dumps(d_point)
+  dprint(1, point)
+  json_point = geojson.loads(point)
+  dprint(1, json_point)
+
+  try:
+    point = geojson.Point(json_point) 
+  except ValueError as e:
+    raise InvalidGeoJson("Invalid GeoJSON Point: %s" % e) 
+  dprint(1, point)
+
+  valid = point.is_valid
+  dprint(1, "VALID=%s" % valid)
+  if not valid:
+    l_errors = point.errors()
+    dprint(1, "ERRORS:%s" % l_errors)
+    raise InvalidGeoJson("Invalid GeoJSON Point: %s" % str(l_errors)) 
+
+  return(d_point)
+ 
+##----------------------------------------------------------------------------------------------
+def validate_geojson_polygon(obj):
+  """
+  Validate that input object is a valid json and has valid GeoJSON format for a "Polygon".
+  Required Arg (json|dict): GeoJSON Polygon object (we can handle json-str or dict)
+  Raises: InvalidGeoJson() if object does not meet criteria for valid GeoJSON Polygon 
+  Returns: dict representation of GeoJSON Polygon 
+  """
+
+  d_poly = None
+  
+  ## basic json validation
+  try:
+    d_poly = basic_json_validation(obj)
+  except Exception as e:
+    raise 
+ 
+  ## GeoJSON Poly validation
   poly = geojson.dumps(d_poly)
   dprint(1, poly)
   json_poly = geojson.loads(poly)
@@ -83,7 +140,7 @@ def validate_geojson(obj):
   ## convert the object to {"coordinates": [], "type": "Polygon"} without errors.
   l_coordinates = poly.get('coordinates', None)
   if not l_coordinates:
-    raise InvalidGeoJson("Invalid GeoJSON Polygon: Empty coordinates") 
+    raise InvalidGeoJson("Invalid GeoJSON Point: Missing required parameter: [coordinates]") 
 
   return(d_poly)
 
@@ -97,11 +154,11 @@ def check_polygon_intersection(poly_1, poly_2):
 
   ## validate format and convert to dict
   try:
-    d_poly_1 = validate_geojson(poly_1)
+    d_poly_1 = validate_geojson_polygon(poly_1)
   except Exception as e:
     raise 
   try:
-    d_poly_2 = validate_geojson(poly_2)
+    d_poly_2 = validate_geojson_polygon(poly_2)
   except Exception as e:
     raise 
   
@@ -126,11 +183,11 @@ def get_overlap_area(poly_1, poly_2):
   
   ## validate format and convert to dict
   try:
-    d_poly_1 = validate_geojson(poly_1)
+    d_poly_1 = validate_geojson_polygon(poly_1)
   except Exception as e:
     raise 
   try:
-    d_poly_2 = validate_geojson(poly_2)
+    d_poly_2 = validate_geojson_polygon(poly_2)
   except Exception as e:
     raise 
 
@@ -140,6 +197,44 @@ def get_overlap_area(poly_1, poly_2):
 
   area = intersection.area
   d_response = {'overlap_area': area}
+
+  return(d_response)
+
+##----------------------------------------------------------------------------------------------
+def check_point_in_polygon(**kwargs):
+  """
+  Identify if a point is "within" the boundry of a polygon
+  Required kwargs: 
+    * point (json): GeoJSON Point 
+    * polygon (json): GeoJSON Polygon
+  Return (dict): {'is_within': (0|1)} 
+  """
+
+  point = kwargs.get("point", None)
+  poly = kwargs.get("polygon", None)
+ 
+  ## validate format and convert to dict
+  try:
+    d_point = validate_geojson_point(point)
+  except Exception as e:
+    raise 
+  try:
+    d_poly = validate_geojson_polygon(poly)
+  except Exception as e:
+    raise 
+  
+  d_response = {'is_within': 0}
+
+  shape_pt = shape(d_point)
+  shape_poly = shape(d_poly)
+
+  #print(shape_pt)
+  #print(shape_poly)
+
+  result = shape_pt.within(shape_poly) ## => True|False
+
+  if result:
+    d_response = {'is_within': 1}
 
   return(d_response)
 
@@ -188,9 +283,17 @@ if __name__ == '__main__':
   except Exception as e:
     raise 
 
+  ## lat/long of Denver, Colorado
+  pt_denver = { "type": "Point", "coordinates": [-104.94189, 39.743764] }
+
   with open('./data/colorado.json', 'r') as f_colorado:
     d_colorado = json.load(f_colorado)
     json_colorado = json.dumps(d_colorado)
+
+    print("\nTesting if Denver (center-point lat/lon) is within Colorado...")
+    result = check_point_in_polygon(point=pt_denver, polygon=json_colorado) 
+    print("RESULT: %s" % (result))
+
  
     with open('./data/wyoming.json', 'r') as f_wyoming:
       d_wyoming = json.load(f_wyoming)
