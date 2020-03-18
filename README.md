@@ -5,6 +5,7 @@
 ### Simple (Python3/Flask) service to perform polygon-geometry operations
  1) **Intersection** of 2 polygons (in GeoJSON format).  
     Endpoint: *api/polygon_intersection*   
+    POST Payload: 2 polygons in GeoJSON format  
     Returns boolean identification of intersection:  {"intersects":(1|0)}
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[1199915, 633079], [1199915, 614453], [1219317, 614453], [1219317, 633079], [1199915, 633079]]] } ]}' http://127.0.0.1:8080/api/polygon_intersection
@@ -13,18 +14,26 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
   
  2) **Overlap Area** of 2 polygons.  
     Endpoint:  *api/polygon_overlap_area*   
+    POST Payload: 2 polygons in GeoJSON format  
     Returns overlap area (if any) of the two polygons: {"overlap_area": _float_}
 ```
-$ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]]] } ]}' http://127.0.0.1:8080/api/polygon_overlap_area
-{"overlap_area":0.0}
-
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[1199915, 633079], [1199915, 614453], [1219317, 614453], [1219317, 633079], [1199915, 633079]]] } ]}' http://127.0.0.1:8080/api/polygon_overlap_area
 {"overlap_area":109165353.0}
+```
+ 
+ 3) **Point-in-polygon** - is point within (inside) polygon.  
+    Endpoint:  *api/point_in_polygon*   
+    POST Payload: 1 GeoJSON Polygon, 1 GeoJSON Point 
+    Returns boolean identification of whether or not polygon contains point:  {"is_within":(1|0)}
+```
+$ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygon": { "type": "Polygon", "coordinates": [[[24.950899, 60.169158], [24.953492, 60.169158], [24.953510, 60.170104], [24.950958, 60.169990], [24.950899, 60.169158]]] }, "point": { "type": "Point", "coordinates": [24.952242, 60.1696017] } }' http://127.0.0.1:8080/api/point_in_polygon
+{"is_within":1}
 ```
 
 ## Requirements
  * geojson==2.5.0
  * Shapely==1.7.0
+ * jsonschema==3.2.0 
  * pytest==5.3.5
  * Flask==1.1.1 (auto-installs lots of other pkgs)
 
@@ -132,4 +141,16 @@ $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-t
 ```
 $ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygons": [{ "type": "Polygon", "coordinates": [[[1208064, 624154], [1208064, 601260], [1231345, 601260], [1231345, 624154], [1208064, 624154]]] }, { "type": "Polygon", "coordinates": [[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]]] } ]}' http://127.0.0.1:8080/api/polygon_overlap
 {"overlap_area":0.0}
+```
+
+**POST (successful identification of point-in-polygon)
+```
+$ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygon": { "type": "Polygon", "coordinates": [[[24.950899, 60.169158], [24.953492, 60.169158], [24.953510, 60.170104], [24.950958, 60.169990], [24.950899, 60.169158]]] }, "point": { "type": "Point", "coordinates": [24.952242, 60.1696017] } }' http://127.0.0.1:8080/api/point_in_polygon
+{"is_within":1}
+```
+
+**POST (successful identification of point-NOT-in-polygon)
+```
+$ curl -H '{"Content-Type":"application/json"}' -d '{"api_key":"fanselow-pgass-test", "polygon": { "type": "Polygon", "coordinates": [[[24.950899, 60.169158], [24.953492, 60.169158], [24.953510, 60.170104], [24.950958, 60.169990], [24.950899, 60.169158]]] }, "point": { "type": "Point", "coordinates": [240.42, 10.17] } }' http://127.0.0.1:8080/api/point_in_polygon
+{"is_within":0}
 ```
